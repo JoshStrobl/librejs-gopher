@@ -86,31 +86,28 @@ func GetFileLicense(file string) (LibreJSMetaInfo, error) {
 		fileContent := string(fileContentBytes[:])           // Convert to string
 		fileContentLines := strings.Split(fileContent, "\n") // Split each new line into an []string
 		fileContentLinesCount := len(fileContentLines)
+		linesParsed := 0 // Define linesParsed as the number of lines parsed by FileLicenseLineParser
 
 		if fileContentLinesCount > 1 { // If this file is not a single line or empty
-			fileLineParserChannel := make(chan LibreJSMetaInfo) // Make a channel that takes LibreJSMetaInfo
-			linesParsed := 0                                    // Define linesParsed as the number of lines parsed by FileLicenseLineParser
+			fileLineParserChannel := make(chan LibreJSMetaInfo, fileContentLinesCount) // Make a channel that takes LibreJSMetaInfo
 
 			for _, lineContent := range fileContentLines { // For each license
 				go FileLicenseLineParser(fileLineParserChannel, lineContent) // Asynchronously call FileLicenseLineParser
 			}
 
-		LineParserLoop:
-			for libreJsMetaInfo := range fileLineParserChannel { // Constantly listen for channel input
-				var endChannelListening bool
+            LineParserLoop:
+    			for libreJsMetaInfo := range fileLineParserChannel { // Constantly listen for channel input
+    				if libreJsMetaInfo.License != "" { // If the provided LibreJSMetaInfo has a valid License
+    					metaInfo = libreJsMetaInfo // Assign metaInfo as provided libreJsMetaInfo
+    				}
 
-				linesParsed++ // Add one two linesParsed
+    				linesParsed++ // Increment linesParsed
 
-				if libreJsMetaInfo.License != "" { // If the provided LibreJSMetaInfo has a valid License
-					metaInfo = libreJsMetaInfo // Assign metaInfo as provided libreJsMetaInfo
-					endChannelListening = true
-				}
-
-				if (fileContentLinesCount == linesParsed) || (endChannelListening) { // If we have parsed all lines or found the header info
-					close(fileLineParserChannel) // Close the channel
-					break LineParserLoop         // Break the loop
-				}
-			}
+    				if fileContentLinesCount == linesParsed { // If we're parsed all the liens
+    					close(fileLineParserChannel) // Close the channel
+                        break LineParserLoop // Break LineParserLoop
+    				}
+    			}
 
 			if metaInfo.License == "" { // If there is no License defined by the end of the file
 				getError = errors.New("LibreJS short-form header does not exist in this file.")
@@ -135,12 +132,12 @@ func FileLicenseLineParser(returnContentChannel chan LibreJSMetaInfo, lineConten
 	lineContent = strings.TrimPrefix(lineContent, " ")       // Trim any prefixed whitespace
 
 	if strings.HasPrefix(lineContent, "@license") { // If the line starts with @license
-		licenseHeaderFragments := strings.SplitN(lineContent, " ", 3)  // Split the license header info into three segments, separated by whitespace
+		licenseHeaderFragments := strings.SplitN(lineContent, " ", 3) // Split the license header info into three segments, separated by whitespace
 
-        if len(licenseHeaderFragments) == 3 { // If there are three items in the slice, meaning this is a @license line and not @license-end
-            metaInfo.License = ParseLicenseName(licenseHeaderFragments[2]) // Define License as the parsed license name of the last item in fragments index
-		    metaInfo.Magnet = licenseHeaderFragments[1]                    // Define Magnet as the second item in the fragments index
-        }
+		if len(licenseHeaderFragments) == 3 { // If there are three items in the slice, meaning this is a @license line and not @license-end
+			metaInfo.License = ParseLicenseName(licenseHeaderFragments[2]) // Define License as the parsed license name of the last item in fragments index
+			metaInfo.Magnet = licenseHeaderFragments[1]                    // Define Magnet as the second item in the fragments index
+		}
 	}
 
 	returnContentChannel <- metaInfo
@@ -171,7 +168,7 @@ func ParseLicenseName(license string) string {
 		license = strings.Replace(license, strings.ToLower(licenseCapitalizedString), licenseCapitalizedString, -1) // Replace any lowercase instance with capitalized instance
 	}
 
-	license = strings.Title(license)               // Title the license (example: apache -> Apache)
+	license = strings.Title(license)                 // Title the license (example: apache -> Apache)
 	license = strings.Replace(license, " ", "-", -1) // Replace whitespacing with hyphens
 
 	return license
