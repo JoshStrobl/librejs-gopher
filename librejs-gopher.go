@@ -5,6 +5,7 @@ package librejsgopher
 import (
 	"errors"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -33,6 +34,44 @@ func init() {
 		"X11":           "magnet:?xt=urn:btih:5305d91886084f776adcf57509a648432709a7c7&dn=x11.txt",
 		"XFree86":       "magnet:?xt=urn:btih:12f2ec9e8de2a3b0002a33d518d6010cc8ab2ae9&dn=xfree86.txt",
 	}
+}
+
+// AddLicenseInfo
+// This function will add a valid LibreJS short-form header and footer to the file. You can set to write the file automatically (we will always return new file content or an error)
+func AddLicenseInfo(license string, file string, writeContentAutomatically bool) (string, error) {
+	var newFileContent string
+	var addError error
+
+	if strings.HasSuffix(file, ".js") { // If this is a JavaScript file
+		fileContentBytes, fileReadError := ioutil.ReadFile(file) // Get the fileContent or if the file does not exist (or we do not have the permission) assign to fileReadError
+
+		if fileReadError == nil { // If there was no read error
+			parsedLicense := ParseLicenseName(license)             // Format license to be consistent when appending to newFileContent
+			magnetURL, magnetError := GetMagnetLink(parsedLicense) // Attempt to get the magnet URL and if license does not exist return error
+
+			if magnetError == nil { // If the license requested is valid and return a magnet URL
+				fileContentString := string(fileContentBytes[:])                                                             // Convert to string
+				newFileContent = "@license " + magnetURL + " " + parsedLicense + "\n" + fileContentString + "\n@license-end" // Add @license INFO + content + @license-end
+
+				if writeContentAutomatically { // If we should write the file content automatically
+					fileStruct, _ := os.Open(file)   // Open the file and get an os.File struct
+					fileStat, _ := fileStruct.Stat() // Get the stats about the file
+					fileMode := fileStat.Mode()
+					fileStruct.Close() // Close the open file struct
+
+					ioutil.WriteFile(file, []byte(newFileContent), fileMode) // Write the file with the new content and same mode
+				}
+			} else { // If the magnetURL does not exist
+				addError = magnetError // Assign addError as the magnetError
+			}
+		} else { // If there was a read error
+			addError = errors.New(file + " does not exist.")
+		}
+	} else { // File provided is not a JavaScript file
+		addError = errors.New(file + " is not a JavaScript file (detected if ending with .js).")
+	}
+
+	return newFileContent, addError
 }
 
 // GetFileLicense
