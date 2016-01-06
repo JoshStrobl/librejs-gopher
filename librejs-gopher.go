@@ -136,8 +136,11 @@ func FileLicenseLineParser(returnContentChannel chan LibreJSMetaInfo, lineConten
 
 	if strings.HasPrefix(lineContent, "@license") { // If the line starts with @license
 		licenseHeaderFragments := strings.SplitN(lineContent, " ", 3)  // Split the license header info into three segments, separated by whitespace
-		metaInfo.License = ParseLicenseName(licenseHeaderFragments[2]) // Define License as the parsed license name of the last item in fragments index
-		metaInfo.Magnet = licenseHeaderFragments[1]                    // Define Magnet as the second item in the fragments index
+
+        if len(licenseHeaderFragments) == 3 { // If there are three items in the slice, meaning this is a @license line and not @license-end
+            metaInfo.License = ParseLicenseName(licenseHeaderFragments[2]) // Define License as the parsed license name of the last item in fragments index
+		    metaInfo.Magnet = licenseHeaderFragments[1]                    // Define Magnet as the second item in the fragments index
+        }
 	}
 
 	returnContentChannel <- metaInfo
@@ -168,7 +171,7 @@ func ParseLicenseName(license string) string {
 		license = strings.Replace(license, strings.ToLower(licenseCapitalizedString), licenseCapitalizedString, -1) // Replace any lowercase instance with capitalized instance
 	}
 
-	license = strings.ToTitle(license)               // Title the license (example: apache -> Apache)
+	license = strings.Title(license)               // Title the license (example: apache -> Apache)
 	license = strings.Replace(license, " ", "-", -1) // Replace whitespacing with hyphens
 
 	return license
