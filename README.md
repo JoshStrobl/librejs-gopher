@@ -8,4 +8,4 @@ LibreJS-Gopher is a Go package that handles:
 
 ## Usage ##
 
-Let me right it first, ya?
+Let me write it first, ya?
