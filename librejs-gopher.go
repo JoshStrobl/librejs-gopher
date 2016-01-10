@@ -95,19 +95,19 @@ func GetFileLicense(file string) (LibreJSMetaInfo, error) {
 				go FileLicenseLineParser(fileLineParserChannel, lineContent) // Asynchronously call FileLicenseLineParser
 			}
 
-            LineParserLoop:
-    			for libreJsMetaInfo := range fileLineParserChannel { // Constantly listen for channel input
-    				if libreJsMetaInfo.License != "" { // If the provided LibreJSMetaInfo has a valid License
-    					metaInfo = libreJsMetaInfo // Assign metaInfo as provided libreJsMetaInfo
-    				}
+		LineParserLoop:
+			for libreJsMetaInfo := range fileLineParserChannel { // Constantly listen for channel input
+				if libreJsMetaInfo.License != "" { // If the provided LibreJSMetaInfo has a valid License
+					metaInfo = libreJsMetaInfo // Assign metaInfo as provided libreJsMetaInfo
+				}
 
-    				linesParsed++ // Increment linesParsed
+				linesParsed++ // Increment linesParsed
 
-    				if fileContentLinesCount == linesParsed { // If we're parsed all the liens
-    					close(fileLineParserChannel) // Close the channel
-                        break LineParserLoop // Break LineParserLoop
-    				}
-    			}
+				if fileContentLinesCount == linesParsed { // If we're parsed all the liens
+					close(fileLineParserChannel) // Close the channel
+					break LineParserLoop         // Break LineParserLoop
+				}
+			}
 
 			if metaInfo.License == "" { // If there is no License defined by the end of the file
 				getError = errors.New("LibreJS short-form header does not exist in this file.")
@@ -169,7 +169,7 @@ func ParseLicenseName(license string) string {
 	}
 
 	license = strings.Title(license)                 // Title the license (example: apache -> Apache)
-	license = strings.TrimSpace(license) // Trim all the spacing before and after the license
+	license = strings.TrimSpace(license)             // Trim all the spacing before and after the license
 	license = strings.Replace(license, " ", "-", -1) // Replace whitespacing with hyphens
 
 	return license
