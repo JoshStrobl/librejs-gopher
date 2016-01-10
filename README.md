@@ -1,12 +1,38 @@
 # LibreJS-Gopher #
 
-LibreJS-Gopher is a Go package that handles:
+LibreJS-Gopher is a Go package (as well as offering binary) that handles:
 
 1. The management and organization of OSI-approved and LibreJS licenses and their known (if any) magnet links for usage with LibreJS.
 2. The checking of licensing information of files.
 3. The wrapping of JavaScript files with LibreJS compliant license header and footers.
 
-## Import ##
+**Current Stable Release:** `0.1`
+
+## Binary ##
+
+### Downloading ###
+
+You can download the pre-compiled binary via the latest stable release [here](https://github.com/JoshStrobl/librejs-gopher/releases/tag/0.1), it is available in the "binary" folder of the tarball.
+
+### Compiling ###
+
+**Requirements:**
+
+- Download and build [nflag](https://github.com/JoshStrobl/nflag).
+
+**Instructions:**
+
+Go to `binary` folder and run the following: `go build -o libregopher libregopher.go`
+
+### Usage ###
+
+You can see the usage of the binary by running:
+
+`./libregopher` or `./libregopher --help`
+
+## Package ##
+
+### Import ###
 
 You can import and use this software by using the line:
 
@@ -20,9 +46,9 @@ Don't have it? Use:
 go get github.com/JoshStrobl/librejs-gopher
 ```
 
-## Usage ##
+### Usage ###
 
-### Variables ###
+#### Variables ####
 
 The following variables are exposed and *useful* when leveraging LibreJS-Gopher.
 
@@ -30,7 +56,7 @@ Name | Description | Type
 ----- | ----- | -----
 LicenseMap | LicenseMap is a map of license names to magnet URLs | `map[string]string`
 
-### Structs ###
+#### Structs ####
 
 The following structs are used and exposed throughout the package
 
@@ -44,11 +70,11 @@ type LibreJSMetaInfo struct {
 }
 ```
 
-### Funcs ###
+#### Funcs ####
 
 The following functions are available for usage by LibreJS-Gopher.
 
-#### AddLicenseInfo ####
+##### AddLicenseInfo #####
 
 This function will add a valid LibreJS short-form header and footer to the file. You can set to write the file automatically. We will always return new file content or an error.
 
@@ -75,7 +101,7 @@ newFileContent, addError := AddLicenseInfo("Apache-2.0", "potato.js", true)
 // @license-end
 ```
 
-#### GetFileLicense ####
+##### GetFileLicense #####
 
 This function will get the license of the file, assuming it uses a valid LibreJS [short-form header](http://www.gnu.org/software/librejs/free-your-javascript.html#magnet-link-license).
 
@@ -103,7 +129,7 @@ metaInfo, error := GetFileLicense("path/to/file.min.js")
 // }
 ```
 
-#### GetMagnetLink ####
+##### GetMagnetLink #####
 
 This function will get a magnet link of the associated license exists. Returns string for magnet link, error if item does not exist.
 
@@ -122,7 +148,7 @@ func GetMagnetLink(license string) (string, error)
 magnetURL, magnetGetError := librejsgopher.GetMagnetLink("Apache-2.0")
 ```
 
-#### ParseLicenseName ####
+##### ParseLicenseName #####
 
 This function will attempt to parse the provided license into a more logic naming scheme used in LicenseMap.
 
