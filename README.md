@@ -74,7 +74,7 @@ type LibreJSMetaInfo struct {
 
 The following functions are available for usage by LibreJS-Gopher.
 
-##### AddLicenseInfo #####
+##### AddLicense #####
 
 This function will add a valid LibreJS short-form header and footer to the file. You can set to write the file automatically. We will always return new file content or an error.
 
@@ -100,6 +100,12 @@ newFileContent, addError := AddLicenseInfo("Apache-2.0", "potato.js", true)
 // potato potato potato
 // @license-end
 ```
+
+##### AddLicenseInfo #####
+
+This function is a backwards-compatible function. Originally landing in `0.1`, this function was responsible for adding the license to the JavaScript file. That function has since been renamed to AddLicense and thus this function solely calls AddLicense. This function will be deprecated in `0.3`.
+
+For documentation, refer to the AddLicense documentation.
 
 ##### GetFileLicense #####
 

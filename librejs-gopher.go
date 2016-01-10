@@ -36,9 +36,9 @@ func init() {
 	}
 }
 
-// AddLicenseInfo
+// AddLicense
 // This function will add a valid LibreJS short-form header and footer to the file. You can set to write the file automatically (we will always return new file content or an error)
-func AddLicenseInfo(license string, file string, writeContentAutomatically bool) (string, error) {
+func AddLicense(license string, file string, writeContentAutomatically bool) (string, error) {
 	var newFileContent string
 	var addError error
 
@@ -72,6 +72,12 @@ func AddLicenseInfo(license string, file string, writeContentAutomatically bool)
 	}
 
 	return newFileContent, addError
+}
+
+// AddLicenseInfo
+// This function is a backwards-compatible call that actually calls AddLicenseInfo
+func AddLicenseInfo(license string, file string, writeContentAutomatically bool) (string, error) {
+	return AddLicense(license, file, writeContentAutomatically)
 }
 
 // GetFileLicense

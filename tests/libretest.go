@@ -41,8 +41,8 @@ func main() {
 
 	// Test Adding License Info
 
-	fmt.Println("Testing AddLicenseInfo on example JS file.")
-	newFileContent, _ := librejsgopher.AddLicenseInfo("Apache-2.0", "test.min.js", true) // Automatically write the file
+	fmt.Println("Testing AddLicense on example JS file.")
+	newFileContent, _ := librejsgopher.AddLicense("Apache-2.0", "test.min.js", true) // Automatically write the file
 	fmt.Println(newFileContent)
 
 	fmt.Println("") // New Line

@@ -87,7 +87,7 @@ func main() {
 		}
 	} else if fileProvided != "" { // If a file was passed
 		if addLicenseString != "" { // If we are adding license information to a file
-			_, derp = librejsgopher.AddLicenseInfo(addLicenseString, fileProvided, true) // Automatically write the license details to the file and return any error
+			_, derp = librejsgopher.AddLicense(addLicenseString, fileProvided, true) // Automatically write the license details to the file and return any error
 		} else if getInfo { // If we are getting the information of this file
 			var metaInfo librejsgopher.LibreJSMetaInfo                  // Define metaInfo as a LibreJsMetaInfo structure
 			metaInfo, derp = librejsgopher.GetFileLicense(fileProvided) // Get any license information provided by GetFileLicense
