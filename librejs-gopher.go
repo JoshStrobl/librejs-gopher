@@ -169,6 +169,7 @@ func ParseLicenseName(license string) string {
 	}
 
 	license = strings.Title(license)                 // Title the license (example: apache -> Apache)
+	license = strings.TrimSpace(license) // Trim all the spacing before and after the license
 	license = strings.Replace(license, " ", "-", -1) // Replace whitespacing with hyphens
 
 	return license
