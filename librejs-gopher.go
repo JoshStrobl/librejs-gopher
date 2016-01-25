@@ -165,6 +165,17 @@ func GetMagnetLink(license string) (string, error) {
 	return magnetURL, magnetLinkFetchError
 }
 
+// IsLicense
+// This function will return whether this is a valid license in the LicenseMap or not
+func IsLicense(license string) bool {
+	var isLicense bool                  // Define isLicense by default as false
+	license = ParseLicenseName(license) // Parse the license
+
+	_, isLicense = LicenseMap[license] // Assign isLicense to bool of LicenseMap[License] exist check
+
+	return isLicense
+}
+
 // ParseLicenseName
 // This function will attempt to parse the provided license into a more logic naming scheme used in LicenseMap
 func ParseLicenseName(license string) string {
