@@ -50,8 +50,8 @@ func AddLicense(license string, file string, writeContentAutomatically bool) (st
 			magnetURL, magnetError := GetMagnetLink(parsedLicense) // Attempt to get the magnet URL and if license does not exist return error
 
 			if magnetError == nil { // If the license requested is valid and return a magnet URL
-				fileContentString := string(fileContentBytes[:])                                                             // Convert to string
-				newFileContent = "@license " + magnetURL + " " + parsedLicense + "\n" + fileContentString + "\n@license-end" // Add @license INFO + content + @license-end
+				fileContentString := string(fileContentBytes[:])                                                                   // Convert to string
+				newFileContent = "// @license " + magnetURL + " " + parsedLicense + "\n" + fileContentString + "\n// @license-end" // Add @license INFO + content + @license-end
 
 				if writeContentAutomatically { // If we should write the file content automatically
 					fileStruct, _ := os.Open(file)   // Open the file and get an os.File struct
