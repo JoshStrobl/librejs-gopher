@@ -6,13 +6,17 @@ LibreJS-Gopher is a Go package (as well as offering binary) that handles:
 2. The checking of licensing information of files.
 3. The wrapping of JavaScript files with LibreJS compliant license header and footers.
 
-**Current Stable Release:** `0.1`
+**Current Stable Release:** `0.2`
+
+## Contributing
+
+This project leverages CodeUtils for development and adopts the CodeUtils Usage Spec. To learn how to contribute to this project and set up CodeUtils, read [here](https://github.com/StroblIndustries/CodeUtils/blob/master/CodeUtils-Usage-Spec.md).
 
 ## Binary ##
 
 ### Downloading ###
 
-You can download the pre-compiled binary via the latest stable release [here](https://github.com/JoshStrobl/librejs-gopher/releases/tag/0.1), it is available in the "binary" folder of the tarball.
+You can download the pre-compiled binary via the latest stable release [here](https://github.com/JoshStrobl/librejs-gopher/releases/tag/0.2), it is available in the "binary" folder of the tarball.
 
 ### Compiling ###
 
