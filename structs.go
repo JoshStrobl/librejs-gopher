@@ -2,8 +2,7 @@
 
 package librejsgopher
 
-// LibreJSMetaInfo
-// This structure contains the name and associated magnet link
+// LibreJSMetaInfo is a struct containing the name and associated magnet link
 type LibreJSMetaInfo struct {
 	License string
 	Magnet  string

@@ -52,12 +52,11 @@ func init() {
 	})
 }
 
-// GetSortedLicenses
-// This function will get the keys of the librejsgopher LicenseMap, ensure they are sorted, then proceed to return them
+// SortedLicenses will get the keys of the librejsgopher LicenseMap, ensure they are sorted, then proceed to return them
 func SortedLicenses() []string {
 	keys := []string{} // Make the string slice
 
-	for licenseName, _ := range librejsgopher.LicenseMap { // For each licenseName
+	for licenseName := range librejsgopher.LicenseMap { // For each licenseName
 		keys = append(keys, []string{licenseName}...) // Append the licenseName to keys
 	}
 

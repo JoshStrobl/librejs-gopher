@@ -9,9 +9,11 @@ import (
 	"strings"
 )
 
-var LicensesCapitalizedStrings []string // An array of strings where each string is a license name or sub-string that needs to be capitalized
+// LicensesCapitalizedStrings is array of strings where each string is a license name or sub-string that needs to be capitalized
+var LicensesCapitalizedStrings []string
 
-var LicenseMap map[string]string // LicenseMap is a map of license names to magnet URLs
+// LicenseMap is a map of license names to magnet URLs
+var LicenseMap map[string]string
 
 func init() {
 	LicensesCapitalizedStrings = []string{"BSD", "CC", "GPL", "ISC", "MPL"}
@@ -36,8 +38,7 @@ func init() {
 	}
 }
 
-// AddLicense
-// This function will add a valid LibreJS short-form header and footer to the file. You can set to write the file automatically (we will always return new file content or an error)
+// AddLicense will add a valid LibreJS short-form header and footer to the file. You can set to write the file automatically (we will always return new file content or an error)
 func AddLicense(license string, file string, writeContentAutomatically bool) (string, error) {
 	var newFileContent string
 	var addError error
@@ -74,14 +75,12 @@ func AddLicense(license string, file string, writeContentAutomatically bool) (st
 	return newFileContent, addError
 }
 
-// AddLicenseInfo
-// This function is a backwards-compatible call that actually calls AddLicenseInfo
+// AddLicenseInfo is a backwards-compatible call that actually calls AddLicenseInfo
 func AddLicenseInfo(license string, file string, writeContentAutomatically bool) (string, error) {
 	return AddLicense(license, file, writeContentAutomatically)
 }
 
-// GetFileLicense
-// This function will get the license of the file, assuming it uses a valid LibreJS short-form header.
+// GetFileLicense will get the license of the file, assuming it uses a valid LibreJS short-form header.
 func GetFileLicense(file string) (LibreJSMetaInfo, error) {
 	var getError error
 	var metaInfo LibreJSMetaInfo
@@ -128,8 +127,7 @@ func GetFileLicense(file string) (LibreJSMetaInfo, error) {
 	return metaInfo, getError
 }
 
-// FileLicenseLineParser
-// This function handles individual line parsing
+// FileLicenseLineParser handles individual line parsing
 func FileLicenseLineParser(returnContentChannel chan LibreJSMetaInfo, lineContent string) {
 	metaInfo := LibreJSMetaInfo{}
 
@@ -149,8 +147,7 @@ func FileLicenseLineParser(returnContentChannel chan LibreJSMetaInfo, lineConten
 	returnContentChannel <- metaInfo
 }
 
-// GetMagnetLink
-// This function will get a magnet link of the associated license exists
+// GetMagnetLink will get a magnet link of the associated license exists
 // Returns string for magnet link, error if item does not exist
 func GetMagnetLink(license string) (string, error) {
 	var magnetLinkFetchError error
@@ -165,8 +162,7 @@ func GetMagnetLink(license string) (string, error) {
 	return magnetURL, magnetLinkFetchError
 }
 
-// IsLicense
-// This function will return whether this is a valid license in the LicenseMap or not
+// IsLicense will return whether this is a valid license in the LicenseMap or not
 func IsLicense(license string) bool {
 	var isLicense bool                  // Define isLicense by default as false
 	license = ParseLicenseName(license) // Parse the license
@@ -176,8 +172,7 @@ func IsLicense(license string) bool {
 	return isLicense
 }
 
-// ParseLicenseName
-// This function will attempt to parse the provided license into a more logic naming scheme used in LicenseMap
+// ParseLicenseName will attempt to parse the provided license into a more logic naming scheme used in LicenseMap
 func ParseLicenseName(license string) string {
 	license = strings.ToLower(license) // Lowercase the entire string to make selective capitalization easier
 
